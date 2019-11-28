@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import SwiftSpinner
+import SwiftyJSON
 
 class SecondViewController: UIViewController {
 
@@ -20,10 +22,37 @@ class SecondViewController: UIViewController {
     @IBOutlet weak var cloudCover: UILabel!
     @IBOutlet weak var ozone: UILabel!
     
+    var city: String = ""
+    var state: String = ""
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        SwiftSpinner.show("Fetching Weather Details for " + city)
+        let networkClient = NetworkClient()
+        let cityWeatherUrl = "https://weatherservice571.azurewebsites.net/street/*/city/" + self.city + "/state/" + self.state
+        
+        guard let getUrl = URL(string: cityWeatherUrl) else {
+            return
+        }
+        networkClient.fetch(getUrl) { (json, error) in
+            if let error = error {
+                debugPrint(error)
+            }
+            else {
+                let jsonUnwrapped = JSON(json)
+                if(jsonUnwrapped["status"].stringValue == "OK") {
+                    let currently = jsonUnwrapped["currently"]
+                    let daily = jsonUnwrapped["daily"]
+                    debugPrint(currently)
+                }
+                else {
+                    debugPrint("Error returning api")
+                }
+            }
+        }
+        SwiftSpinner.hide()
     }
     
 

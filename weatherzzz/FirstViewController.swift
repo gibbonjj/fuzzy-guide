@@ -7,16 +7,22 @@
 //
 
 import UIKit
+import Charts
 
-class FirstViewController: UIViewController {
 
+class FirstViewController: UIViewController, ChartViewDelegate {
+
+
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
 
         // Do any additional setup after loading the view.
     }
     
-
+    
     /*
     // MARK: - Navigation
 

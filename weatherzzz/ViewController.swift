@@ -15,12 +15,15 @@ class ViewController: UIViewController, UITableViewDelegate, UISearchControllerD
 
     @IBOutlet weak var mainDataLanding: UIView!
     let searchController = UISearchController(searchResultsController: nil)
+
     
     private let networkClient = NetworkClient()
     private let locationManager = CLLocationManager()
     @IBOutlet weak var cityList: UITableView!
     
     var cities: [String] = Array()
+    var city: String = ""
+    var state: String = ""
     let textViewController = UITextView()
     
     let autoCompleteUrl = "https://weatherservice571.azurewebsites.net/"
@@ -127,7 +130,23 @@ class ViewController: UIViewController, UITableViewDelegate, UISearchControllerD
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        debugPrint(" has been selected ")
+        let cityString = self.cities[indexPath.row]
+        let cityArray = cityString.components(separatedBy: ", ")
+        self.city = cityArray[0]
+        self.state = cityArray[1]
+        self.performSegue(withIdentifier: "cityClick", sender: self)
+        debugPrint(" has been selected " + self.city + " " + self.state)
+        self.cities.removeAll()
+        
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if(segue.identifier == "cityClick") {
+        let barViewControllers = segue.destination as! UITabBarController
+        let destinationViewController = barViewControllers.viewControllers![0] as! SecondViewController
+        destinationViewController.city = self.city
+        destinationViewController.state = self.state
+        }
     }
 
 }

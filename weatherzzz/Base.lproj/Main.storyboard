@@ -192,6 +192,7 @@
                         <outlet property="cityList" destination="EAE-Ag-8ft" id="RoO-LU-1a9"/>
                         <outlet property="mainDataLanding" destination="79c-Cn-8e0" id="yvR-Do-xab"/>
                         <outlet property="searchDisplayController" destination="fxk-Ci-yC3" id="Ngr-Hi-xPE"/>
+                        <segue destination="ZP9-WX-Hmx" kind="show" identifier="cityClick" id="5gE-ip-9WH"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -236,6 +237,21 @@
                                 <rect key="frame" x="0.0" y="0.0" width="593" height="888"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
+                            <stackView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" spacing="35" translatesAutoresizingMaskIntoConstraints="NO" id="cb6-XD-9Vd">
+                                <rect key="frame" x="20" y="140" width="365" height="90"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="weather-rainy" translatesAutoresizingMaskIntoConstraints="NO" id="Rus-Od-AFW">
+                                        <rect key="frame" x="0.0" y="0.0" width="90" height="90"/>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Light rain on Monday." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Eqb-5F-U1b">
+                                        <rect key="frame" x="125" y="0.0" width="240" height="90"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="26"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="JRg-B9-hfV"/>
@@ -244,7 +260,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ubG-Fh-EJT" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3438" y="1287"/>
+            <point key="canvasLocation" x="3437.68115942029" y="1286.3839285714284"/>
         </scene>
         <!--Photos-->
         <scene sceneID="7kA-v6-QGG">
@@ -535,8 +551,12 @@
         <image name="weather-fog" width="80" height="80"/>
         <image name="weather-night" width="90" height="90"/>
         <image name="weather-pouring" width="80" height="80"/>
+        <image name="weather-rainy" width="90" height="90"/>
         <image name="weather-snowy-rainy" width="90" height="90"/>
         <image name="weather-windy" width="80" height="80"/>
         <image name="weather-windy50" width="50" height="50"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="5gE-ip-9WH"/>
+    </inferredMetricsTieBreakers>
 </document>
