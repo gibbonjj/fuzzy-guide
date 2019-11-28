@@ -23,6 +23,9 @@ class ViewController: UIViewController, UITableViewDelegate, UISearchControllerD
     var cities: [String] = Array()
     let textViewController = UITextView()
     
+    let autoCompleteUrl = "https://weatherservice571.azurewebsites.net/"
+
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -32,15 +35,24 @@ class ViewController: UIViewController, UITableViewDelegate, UISearchControllerD
         self.searchController.searchBar.delegate = self
         self.searchController.hidesNavigationBarDuringPresentation = false
         self.searchController.dimsBackgroundDuringPresentation = false
-        self.navigationItem.titleView = searchController.searchBar
+        
+        let citySearchBar = searchController.searchBar
+        citySearchBar.delegate = self
+        citySearchBar.placeholder = "Enter City Name..."
+        self.navigationItem.titleView = citySearchBar
+
+        debugPrint(citySearchBar.text?.count)
         self.definesPresentationContext = true
 
         //** SearchList **
         cityList.dataSource = self
         cityList.layoutIfNeeded()
+        cityList.delegate = self
         cityList.layer.cornerRadius = CGFloat(7.0)
+        cityList.isHidden = true
         cities.append("Los Angeles")
         cities.append("Las Vegas")
+
         
         //** Location **
         locationManager.requestWhenInUseAuthorization()
@@ -52,10 +64,10 @@ class ViewController: UIViewController, UITableViewDelegate, UISearchControllerD
             return
         }
         networkClient.fetch(getUrl) { (json, error) in
-            if let error = error {
+            if error != nil {
                 
             } else {
-                 debugPrint(json)
+                 // debugPrint(json)
             }
         }
     }
@@ -64,8 +76,44 @@ class ViewController: UIViewController, UITableViewDelegate, UISearchControllerD
     
     }
     
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        guard let getUrl = URL(string: autoCompleteUrl + searchText) else {
+            return
+        }
+        if(searchText != "") {
+            
+        
+        networkClient.fetch(getUrl) { (json, error) in
+            if let error = error {
+                self.cityList.isHidden = true
+                debugPrint(error)
+            }
+            else {
+                let jsonUnwrapped = JSON(json)
+                self.cities.removeAll()
+                if(jsonUnwrapped["status"].stringValue == "OK") {
+                    for prediction in jsonUnwrapped["predictions"].arrayValue {
+                        let description = prediction["description"].stringValue
+                        self.cities.append(description)
+                    }
+                    self.cityList.reloadData()
+                    self.cityList.isHidden = false
+                }
+                else {
+                    self.cityList.isHidden = true
+                }
+            }
+        debugPrint(searchText)
+        debugPrint(self.cities)
+        }
+        }
+        else {
+            self.cityList.isHidden = true
+        }
+    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
         return cities.count
     }
 
@@ -76,6 +124,10 @@ class ViewController: UIViewController, UITableViewDelegate, UISearchControllerD
         }
         cell?.textLabel?.text = cities[indexPath.row]
         return cell!
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        debugPrint(" has been selected ")
     }
 
 }
