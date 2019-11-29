@@ -24,6 +24,8 @@ class SecondViewController: UIViewController {
     
     var city: String = ""
     var state: String = ""
+    var currently: JSON = [:]
+    var daily: JSON = [:]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,9 +45,12 @@ class SecondViewController: UIViewController {
             else {
                 let jsonUnwrapped = JSON(json)
                 if(jsonUnwrapped["status"].stringValue == "OK") {
-                    let currently = jsonUnwrapped["currently"]
-                    let daily = jsonUnwrapped["daily"]
-                    debugPrint(currently)
+                    self.currently = jsonUnwrapped["currently"]
+                    self.daily = jsonUnwrapped["daily"]
+                    let barViewControllers = self.tabBarController as! UITabBarController
+                    let destinationViewController = barViewControllers.viewControllers![1] as! FirstViewController
+                    destinationViewController.daily = self.daily
+                    debugPrint(self.currently)
                 }
                 else {
                     debugPrint("Error returning api")
@@ -55,7 +60,6 @@ class SecondViewController: UIViewController {
         SwiftSpinner.hide()
     }
     
-
     /*
     // MARK: - Navigation
 

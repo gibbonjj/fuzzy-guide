@@ -9,7 +9,10 @@
 import UIKit
 
 class ThirdViewController: UIViewController {
-
+    
+    var city: String = ""
+    var state: String = ""
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 

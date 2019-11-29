@@ -142,10 +142,13 @@ class ViewController: UIViewController, UITableViewDelegate, UISearchControllerD
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if(segue.identifier == "cityClick") {
-        let barViewControllers = segue.destination as! UITabBarController
-        let destinationViewController = barViewControllers.viewControllers![0] as! SecondViewController
-        destinationViewController.city = self.city
-        destinationViewController.state = self.state
+            let barViewControllers = segue.destination as! UITabBarController
+            let destinationViewController = barViewControllers.viewControllers![0] as! SecondViewController
+            destinationViewController.city = self.city
+            destinationViewController.state = self.state
+            let thirdViewController = barViewControllers.viewControllers![2] as! ThirdViewController
+            thirdViewController.city = self.city
+            thirdViewController.state = self.state
         }
     }
 
