@@ -15,11 +15,24 @@ class FirstViewController: UIViewController, ChartViewDelegate{
     // https://www.iosapptemplates.com/blog/swift-programming/ios-charts-swift
     @IBOutlet weak var lineChartView: LineChartView!
     var daily: JSON = [:]
+    var city: String = ""
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tabBarController?.navigationItem.title = self.city
+        let twitterImg: UIImage = UIImage(named: "twitter.png")!
+        let tweetButton: UIButton = UIButton(type: UIButton.ButtonType.custom)
+        tweetButton.setImage(twitterImg, for: .normal)
+        tweetButton.addTarget(self, action: #selector(FirstViewController.createTweet), for: .touchUpInside)
+        let twitterButton = UIBarButtonItem(customView: tweetButton)
+        self.tabBarController?.navigationItem.rightBarButtonItem = twitterButton
+    }
     
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        debugPrint(self.daily)
+        self.navigationItem.title = self.city
+
         var days: [Int] = []
         var minTemps: [Double] = []
         var maxTemps: [Double] = []
@@ -60,4 +73,15 @@ class FirstViewController: UIViewController, ChartViewDelegate{
         self.lineChartView.data = data
     }
     
+    @objc func createTweet() {
+        debugPrint("it works")
+        let twitterUrl = "https://twitter.com/intent/tweet?text=The current temperature at " + self.city + " is 72 ˚F. The weather conditions are sunny.&hashtags=CSCI571WeatherSearch"
+        let encodedTwitterUrl = twitterUrl.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+        let twitterLink = URL(string: encodedTwitterUrl!)
+        debugPrint(twitterLink)
+        if UIApplication.shared.canOpenURL(twitterLink!) {
+            debugPrint(twitterLink)
+            UIApplication.shared.open(twitterLink!, options: [:], completionHandler: nil)
+        }
+    }
 }

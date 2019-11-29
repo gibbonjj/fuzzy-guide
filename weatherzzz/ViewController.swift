@@ -25,13 +25,17 @@ class ViewController: UIViewController, UITableViewDelegate, UISearchControllerD
     var city: String = ""
     var state: String = ""
     let textViewController = UITextView()
+    var lat: Double = 0.0
+    var long: Double = 0.0
+    var localData: JSON = [:]
+
     
     let autoCompleteUrl = "https://weatherservice571.azurewebsites.net/"
 
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         //** SearchBar **
         self.searchController.searchResultsUpdater = self
         self.searchController.delegate = self
@@ -47,7 +51,7 @@ class ViewController: UIViewController, UITableViewDelegate, UISearchControllerD
         debugPrint(citySearchBar.text?.count)
         self.definesPresentationContext = true
 
-        //** SearchList **
+        //** SearchList UITableView 1**
         cityList.dataSource = self
         cityList.layoutIfNeeded()
         cityList.delegate = self
@@ -58,10 +62,9 @@ class ViewController: UIViewController, UITableViewDelegate, UISearchControllerD
 
         
         //** Location **
-        locationManager.requestWhenInUseAuthorization()
-        locationManager.startUpdatingLocation()
         locationManager.delegate = self
-        
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.requestLocation()
 
         guard let getUrl = URL(string: "https://weatherservice571.azurewebsites.net/street/819%20Santee%20St/city/Los%20Angeles/state/California") else {
             return
@@ -73,6 +76,8 @@ class ViewController: UIViewController, UITableViewDelegate, UISearchControllerD
                  // debugPrint(json)
             }
         }
+        
+        //** UITableViewTwo
     }
     
     func updateSearchResults(for searchController: UISearchController) {
@@ -116,20 +121,35 @@ class ViewController: UIViewController, UITableViewDelegate, UISearchControllerD
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        return cities.count
+        if tableView == cityList {
+            return cities.count
+        }
+        else {
+            return 7
+        }
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if tableView == cityList {
         var cell = tableView.dequeueReusableCell(withIdentifier: "city")
         if cell == nil {
             cell = UITableViewCell()
         }
         cell?.textLabel?.text = cities[indexPath.row]
         return cell!
+        }
+        else {
+            var cell = tableView.dequeueReusableCell(withIdentifier: "city")
+            if cell == nil {
+                cell = UITableViewCell()
+            }
+            cell?.textLabel?.text = cities[indexPath.row]
+            return cell!
+        }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if tableView == cityList {
         let cityString = self.cities[indexPath.row]
         let cityArray = cityString.components(separatedBy: ", ")
         self.city = cityArray[0]
@@ -137,7 +157,7 @@ class ViewController: UIViewController, UITableViewDelegate, UISearchControllerD
         self.performSegue(withIdentifier: "cityClick", sender: self)
         debugPrint(" has been selected " + self.city + " " + self.state)
         self.cities.removeAll()
-        
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -157,7 +177,30 @@ class ViewController: UIViewController, UITableViewDelegate, UISearchControllerD
 extension ViewController : CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager,  didUpdateLocations locations: [CLLocation]) {
         let lastLocation = locations.last!
-        debugPrint(lastLocation)
+        debugPrint("hello")
+        self.lat = lastLocation.coordinate.latitude
+        self.long = lastLocation.coordinate.longitude
+        debugPrint(lastLocation.coordinate.latitude)
+        debugPrint(lastLocation.coordinate.longitude)
+        
+        let localLink: String = "https://weatherservice571.azurewebsites.net/lat/" + String(self.lat) + "/long/" + String(self.long)
+        debugPrint(localLink)
+        guard let localUrl = URL(string: localLink) else {
+            return
+        }
+        
+        networkClient.fetch(localUrl) { (json, error) in
+            if error != nil {
+                debugPrint(error)
+            } else {
+                self.localData = json!
+                debugPrint(self.localData)
+            }
+        }
         // Do something with the location.
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        debugPrint(error)
     }
 }

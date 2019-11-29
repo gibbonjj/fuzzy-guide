@@ -12,6 +12,7 @@ import SwiftyJSON
 
 class SecondViewController: UIViewController {
 
+
     @IBOutlet weak var windSpeed: UILabel!
     @IBOutlet weak var pressure: UILabel!
     @IBOutlet weak var precipitation: UILabel!
@@ -27,9 +28,21 @@ class SecondViewController: UIViewController {
     var currently: JSON = [:]
     var daily: JSON = [:]
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tabBarController?.navigationItem.title = self.city
+        let twitterImg: UIImage = UIImage(named: "twitter.png")!
+        let tweetButton: UIButton = UIButton(type: UIButton.ButtonType.custom)
+        tweetButton.setImage(twitterImg, for: .normal)
+        tweetButton.addTarget(self, action: #selector(SecondViewController.createTweet), for: .touchUpInside)
+        let twitterButton = UIBarButtonItem(customView: tweetButton)
+        self.tabBarController?.navigationItem.rightBarButtonItem = twitterButton
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        //self.todayNavBar.rightBarButtonItem = twitterButton
         // Do any additional setup after loading the view.
         SwiftSpinner.show("Fetching Weather Details for " + city)
         let networkClient = NetworkClient()
@@ -50,6 +63,7 @@ class SecondViewController: UIViewController {
                     let barViewControllers = self.tabBarController as! UITabBarController
                     let destinationViewController = barViewControllers.viewControllers![1] as! FirstViewController
                     destinationViewController.daily = self.daily
+                    destinationViewController.city = self.city
                     debugPrint(self.currently)
                 }
                 else {
@@ -60,6 +74,17 @@ class SecondViewController: UIViewController {
         SwiftSpinner.hide()
     }
     
+    @objc func createTweet() {
+        debugPrint("it works")
+        let twitterUrl = "https://twitter.com/intent/tweet?text=The current temperature at " + self.city + " is 72 ˚F. The weather conditions are sunny.&hashtags=CSCI571WeatherSearch"
+        let encodedTwitterUrl = twitterUrl.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+        let twitterLink = URL(string: encodedTwitterUrl!)
+        debugPrint(twitterLink)
+        if UIApplication.shared.canOpenURL(twitterLink!) {
+            debugPrint(twitterLink)
+            UIApplication.shared.open(twitterLink!, options: [:], completionHandler: nil)
+        }
+    }
     /*
     // MARK: - Navigation
 
