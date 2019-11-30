@@ -11,15 +11,28 @@ import Alamofire
 import CoreLocation
 import SwiftyJSON
 
-class ViewController: UIViewController, UITableViewDelegate, UISearchControllerDelegate, UITableViewDataSource, UISearchResultsUpdating, UISearchBarDelegate {
+struct CellData {
+    let date: String
+    let forecastImg: UIImage
+    let sunUpTime: String
+    let sunUpImg: UIImage
+    let sunDownTime: String
+    let sunDownImg: UIImage
+}
 
+class ViewController: UIViewController, UITableViewDelegate, UISearchControllerDelegate, UITableViewDataSource, UISearchResultsUpdating, UISearchBarDelegate, UIScrollViewDelegate  {
+    @IBOutlet weak var pageControl: UIPageControl!
+    
     @IBOutlet weak var mainDataLanding: UIView!
+
     let searchController = UISearchController(searchResultsController: nil)
 
-    
+    var weeklyDataCells = [CellData]()
     private let networkClient = NetworkClient()
     private let locationManager = CLLocationManager()
     @IBOutlet weak var cityList: UITableView!
+    @IBOutlet weak var weeklyDataTable: UITableView!
+    var weeklyData:JSON = [:]
     
     var cities: [String] = Array()
     var city: String = ""
@@ -28,13 +41,36 @@ class ViewController: UIViewController, UITableViewDelegate, UISearchControllerD
     var lat: Double = 0.0
     var long: Double = 0.0
     var localData: JSON = [:]
+    var time: Double = 0.0
+    var frame = CGRect(x:0,y:0,width:0,height:0)
 
+    @IBOutlet weak var scrollView: UIScrollView!
     
+
     let autoCompleteUrl = "https://weatherservice571.azurewebsites.net/"
 
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //******** PageControl
+        
+        pageControl.numberOfPages = 4
+        for index in 0..<4 {
+            frame.origin.x = scrollView.frame.size.width * CGFloat(index)
+            frame.size = scrollView.frame.size
+        }
+        scrollView.contentSize = CGSize(width: (scrollView.frame.size.width * CGFloat(4)), height: scrollView.frame.size.height)
+        
+        scrollView.delegate = self
+
+        
+        //****** DataCell
+        weeklyDataTable.register(CustomCell.self, forCellReuseIdentifier: "custom")
+        weeklyDataTable.dataSource = self
+        weeklyDataTable.delegate = self
+        //self.weeklyDataTable.layoutIfNeeded()
+        
 
         //** SearchBar **
         self.searchController.searchResultsUpdater = self
@@ -48,7 +84,7 @@ class ViewController: UIViewController, UITableViewDelegate, UISearchControllerD
         citySearchBar.placeholder = "Enter City Name..."
         self.navigationItem.titleView = citySearchBar
 
-        debugPrint(citySearchBar.text?.count)
+
         self.definesPresentationContext = true
 
         //** SearchList UITableView 1**
@@ -124,8 +160,18 @@ class ViewController: UIViewController, UITableViewDelegate, UISearchControllerD
         if tableView == cityList {
             return cities.count
         }
+        else if tableView == weeklyDataTable {
+            if let weeklyCountArray = self.weeklyData["data"].array {
+                let weeklyCount = weeklyCountArray.count
+
+                return weeklyCount
+            }
+            else {
+                return 0
+            }
+        }
         else {
-            return 7
+            return 0
         }
     }
 
@@ -138,13 +184,36 @@ class ViewController: UIViewController, UITableViewDelegate, UISearchControllerD
         cell?.textLabel?.text = cities[indexPath.row]
         return cell!
         }
-        else {
-            var cell = tableView.dequeueReusableCell(withIdentifier: "city")
-            if cell == nil {
-                cell = UITableViewCell()
-            }
-            cell?.textLabel?.text = cities[indexPath.row]
+        else if tableView == weeklyDataTable {
+
+            let cell = tableView.dequeueReusableCell(withIdentifier: "customWeekCell")
+      
+            // cell?.textLabel?.text = cities[indexPath.row]
+//            if let unixTime = self.weeklyData["data"][indexPath.row]["time"].double {
+//                let formatter = DateFormatter()
+//                formatter.dateFormat = "MM/dd/yyyy"
+//                cell.date = formatter.string(from: NSDate(timeIntervalSince1970: unixTime) as Date)
+//
+//            }
+//            cell.forecastImg = UIImage(named: "weather-windy50") //weather-sunset-up
+//            cell.sunDownImg = UIImage(named: "weather-sunset-down")
+//            cell.sunUpImg = UIImage(named: "weather-sunset-up")
+//            if let sunsetTime = self.weeklyData["data"][indexPath.row]["sunsetTime"].double {
+//                let formatter = DateFormatter()
+//                formatter.dateFormat = "HH:mm"
+//                cell.sunDownTime = formatter.string(from: NSDate(timeIntervalSince1970: sunsetTime) as Date)
+//            }
+//            if let sunriseTime = self.weeklyData["data"][indexPath.row]["sunriseTime"].double {
+//                let formatter = DateFormatter()
+//                formatter.dateFormat = "HH:mm"
+//                cell.sunUpTime = formatter.string(from: NSDate(timeIntervalSince1970: sunriseTime) as Date)
+//            }
+//            debugPrint(cell.sunDownTime)
+//            cell.layoutIfNeeded()
             return cell!
+        }
+        else {
+            return UITableViewCell()
         }
     }
     
@@ -155,7 +224,7 @@ class ViewController: UIViewController, UITableViewDelegate, UISearchControllerD
         self.city = cityArray[0]
         self.state = cityArray[1]
         self.performSegue(withIdentifier: "cityClick", sender: self)
-        debugPrint(" has been selected " + self.city + " " + self.state)
+
         self.cities.removeAll()
         }
     }
@@ -177,14 +246,14 @@ class ViewController: UIViewController, UITableViewDelegate, UISearchControllerD
 extension ViewController : CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager,  didUpdateLocations locations: [CLLocation]) {
         let lastLocation = locations.last!
-        debugPrint("hello")
+
         self.lat = lastLocation.coordinate.latitude
         self.long = lastLocation.coordinate.longitude
-        debugPrint(lastLocation.coordinate.latitude)
-        debugPrint(lastLocation.coordinate.longitude)
+        self.time = lastLocation.timestamp.timeIntervalSince1970
+
         
-        let localLink: String = "https://weatherservice571.azurewebsites.net/lat/" + String(self.lat) + "/long/" + String(self.long)
-        debugPrint(localLink)
+        let localLink: String = "https://weatherservice571.azurewebsites.net/weekly/" + String(self.lat) + "/" + String(self.long)
+
         guard let localUrl = URL(string: localLink) else {
             return
         }
@@ -194,10 +263,19 @@ extension ViewController : CLLocationManagerDelegate {
                 debugPrint(error)
             } else {
                 self.localData = json!
-                debugPrint(self.localData)
+                let jsonUnwrapped = JSON(json)
+                self.weeklyData = jsonUnwrapped["daily"]
+                DispatchQueue.main.async {
+                    self.weeklyDataTable.reloadData()
+                }
             }
         }
         // Do something with the location.
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        var pageNumber = scrollView.contentOffset.x / scrollView.frame.size.width
+        pageControl.currentPage = Int(pageNumber)
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {

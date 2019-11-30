@@ -12,7 +12,10 @@ class ThirdViewController: UIViewController {
     
     var city: String = ""
     var state: String = ""
+    var images: [String] = ["0", "1", "2"]
+    var frame = CGRect(x:0,y:0,width:0,height:0)
     
+    @IBOutlet weak var scrollView: UIScrollView!
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -23,10 +26,18 @@ class ThirdViewController: UIViewController {
         tweetButton.addTarget(self, action: #selector(ThirdViewController.createTweet), for: .touchUpInside)
         let twitterButton = UIBarButtonItem(customView: tweetButton)
         self.tabBarController?.navigationItem.rightBarButtonItem = twitterButton
+        
+        let networkClient = NetworkClient()
+        
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        for index in 0..<images.count {
+            frame.origin.x = scrollView.frame.size.height * CGFloat(index)
+            frame.size = scrollView.frame.size
+        }
 
         // Do any additional setup after loading the view.
     }
