@@ -54,6 +54,7 @@ class SecondViewController: UIViewController {
         networkClient.fetch(getUrl) { (json, error) in
             if let error = error {
                 debugPrint(error)
+                SwiftSpinner.hide()
             }
             else {
                 let jsonUnwrapped = JSON(json)
@@ -65,13 +66,14 @@ class SecondViewController: UIViewController {
                     destinationViewController.daily = self.daily
                     destinationViewController.city = self.city
                     debugPrint(self.currently)
+                    SwiftSpinner.hide()
                 }
                 else {
                     debugPrint("Error returning api")
+                    SwiftSpinner.hide()
                 }
             }
         }
-        SwiftSpinner.hide()
     }
     
     @objc func createTweet() {

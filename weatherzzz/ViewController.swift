@@ -10,6 +10,7 @@ import UIKit
 import Alamofire
 import CoreLocation
 import SwiftyJSON
+import SwiftSpinner
 
 struct CellData {
     let date: String
@@ -52,13 +53,19 @@ class ViewController: UIViewController, UITableViewDelegate, UISearchControllerD
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        SwiftSpinner.show("Loading...")
         //******** PageControl
         
         pageControl.numberOfPages = 4
         for index in 0..<4 {
             frame.origin.x = scrollView.frame.size.width * CGFloat(index)
             frame.size = scrollView.frame.size
+            
+            let homeView = HomeView(frame: frame)
+            if index != 0 {
+                          self.scrollView.addSubview(homeView)
+            }
+
         }
         scrollView.contentSize = CGSize(width: (scrollView.frame.size.width * CGFloat(4)), height: scrollView.frame.size.height)
         
@@ -66,7 +73,8 @@ class ViewController: UIViewController, UITableViewDelegate, UISearchControllerD
 
         
         //****** DataCell
-        weeklyDataTable.register(CustomCell.self, forCellReuseIdentifier: "custom")
+        let weekCell = UINib(nibName: "WeeklyData", bundle: nil)
+        weeklyDataTable.register(weekCell, forCellReuseIdentifier: "WeekData")
         weeklyDataTable.dataSource = self
         weeklyDataTable.delegate = self
         //self.weeklyDataTable.layoutIfNeeded()
@@ -102,16 +110,16 @@ class ViewController: UIViewController, UITableViewDelegate, UISearchControllerD
         locationManager.requestWhenInUseAuthorization()
         locationManager.requestLocation()
 
-        guard let getUrl = URL(string: "https://weatherservice571.azurewebsites.net/street/819%20Santee%20St/city/Los%20Angeles/state/California") else {
-            return
-        }
-        networkClient.fetch(getUrl) { (json, error) in
-            if error != nil {
-                
-            } else {
-                 // debugPrint(json)
-            }
-        }
+//        guard let getUrl = URL(string: "https://weatherservice571.azurewebsites.net/street/819%20Santee%20St/city/Los%20Angeles/state/California") else {
+//            return
+//        }
+//        networkClient.fetch(getUrl) { (json, error) in
+//            if error != nil {
+//
+//            } else {
+//                 // debugPrint(json)
+//            }
+//        }
         
         //** UITableViewTwo
     }
@@ -186,7 +194,7 @@ class ViewController: UIViewController, UITableViewDelegate, UISearchControllerD
         }
         else if tableView == weeklyDataTable {
 
-            let cell = tableView.dequeueReusableCell(withIdentifier: "customWeekCell")
+            let cell = tableView.dequeueReusableCell(withIdentifier: "WeekData")
       
             // cell?.textLabel?.text = cities[indexPath.row]
 //            if let unixTime = self.weeklyData["data"][indexPath.row]["time"].double {
@@ -231,13 +239,18 @@ class ViewController: UIViewController, UITableViewDelegate, UISearchControllerD
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if(segue.identifier == "cityClick") {
-            let barViewControllers = segue.destination as! UITabBarController
-            let destinationViewController = barViewControllers.viewControllers![0] as! SecondViewController
-            destinationViewController.city = self.city
-            destinationViewController.state = self.state
-            let thirdViewController = barViewControllers.viewControllers![2] as! ThirdViewController
-            thirdViewController.city = self.city
-            thirdViewController.state = self.state
+            
+            let barViewControllers = segue.destination as! FourthViewController
+//            destinationViewController.city = self.city
+//            destinationViewController.state = self.state
+            
+//            let barViewControllers = segue.destination as! UITabBarController
+//            let destinationViewController = barViewControllers.viewControllers![0] as! SecondViewController
+//            destinationViewController.city = self.city
+//            destinationViewController.state = self.state
+//            let thirdViewController = barViewControllers.viewControllers![2] as! ThirdViewController
+//            thirdViewController.city = self.city
+//            thirdViewController.state = self.state
         }
     }
 
