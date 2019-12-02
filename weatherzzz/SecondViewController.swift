@@ -45,35 +45,75 @@ class SecondViewController: UIViewController {
         //self.todayNavBar.rightBarButtonItem = twitterButton
         // Do any additional setup after loading the view.
         SwiftSpinner.show("Fetching Weather Details for " + city)
-        let networkClient = NetworkClient()
-        let cityWeatherUrl = "https://weatherservice571.azurewebsites.net/street/*/city/" + self.city + "/state/" + self.state
+//        let networkClient = NetworkClient()
+//        let cityWeatherUrl = "https://weatherservice571.azurewebsites.net/street/*/city/" + self.city + "/state/" + self.state
+//
+//        guard let getUrl = URL(string: cityWeatherUrl) else {
+//            return
+//        }
+//        networkClient.fetch(getUrl) { (json, error) in
+//            if let error = error {
+//                debugPrint(error)
+//                SwiftSpinner.hide()
+//            }
+//            else {
+//                let jsonUnwrapped = JSON(json)
+//                if(jsonUnwrapped["status"].stringValue == "OK") {
+//                    self.currently = jsonUnwrapped["currently"]
+//                    self.daily = jsonUnwrapped["daily"]
+//                    let barViewControllers = self.tabBarController as! UITabBarController
+//                    let destinationViewController = barViewControllers.viewControllers![1] as! FirstViewController
+//                    destinationViewController.daily = self.daily
+//                    destinationViewController.city = self.city
+//                    debugPrint(self.currently)
+//                    SwiftSpinner.hide()
+//                }
+//                else {
+//                    debugPrint("Error returning api")
+//                    SwiftSpinner.hide()
+//                }
+//            }
+//        }
+
+        if let summary = self.currently["summary"].string {
+            self.nightWeather.text = summary
+        }
         
-        guard let getUrl = URL(string: cityWeatherUrl) else {
-            return
+        if let currentTemp = self.currently["temperature"].double {
+            self.temperature.text = String(Int(currentTemp.rounded())) + " ˚F"
         }
-        networkClient.fetch(getUrl) { (json, error) in
-            if let error = error {
-                debugPrint(error)
-                SwiftSpinner.hide()
-            }
-            else {
-                let jsonUnwrapped = JSON(json)
-                if(jsonUnwrapped["status"].stringValue == "OK") {
-                    self.currently = jsonUnwrapped["currently"]
-                    self.daily = jsonUnwrapped["daily"]
-                    let barViewControllers = self.tabBarController as! UITabBarController
-                    let destinationViewController = barViewControllers.viewControllers![1] as! FirstViewController
-                    destinationViewController.daily = self.daily
-                    destinationViewController.city = self.city
-                    debugPrint(self.currently)
-                    SwiftSpinner.hide()
-                }
-                else {
-                    debugPrint("Error returning api")
-                    SwiftSpinner.hide()
-                }
-            }
+        
+        if let currentHumidity = self.currently["humidity"].double {
+            self.humidity.text = String((currentHumidity * 100.0).rounded()) + " %"
         }
+        
+        if let currentWind = self.currently["windSpeed"].double {
+            self.windSpeed.text = String(format: "%.2f", currentWind) + " mph"
+        }
+        
+        if let currentVis = self.currently["visibility"].double {
+            self.visibility.text = String(format: "%.2f", currentVis) + " km"
+        }
+        
+        if let currentPres = self.currently["pressure"].double {
+            self.pressure.text = String(format: "%.1f", currentPres) + " mb"
+        }
+        
+        if let ozone = self.currently["ozone"].double {
+            self.ozone.text = String(format: "%.1f", ozone) + " DU"
+        }
+        
+        if let cloudCover = self.currently["cloudCover"].double {
+            self.cloudCover.text = String(format: "%.2f", cloudCover * 100.0) + " %"
+        }
+        
+        if let precip = self.currently["precipIntensity"].double {
+            self.precipitation.text = String(format: "%.1f", precip * 100.0) + " %"
+        }
+        
+        debugPrint(self.currently)
+        
+        SwiftSpinner.hide()
     }
     
     @objc func createTweet() {

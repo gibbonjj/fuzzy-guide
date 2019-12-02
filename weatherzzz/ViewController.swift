@@ -21,6 +21,10 @@ struct CellData {
     let sunDownImg: UIImage
 }
 
+struct DataCell {
+    
+}
+
 class ViewController: UIViewController, UITableViewDelegate, UISearchControllerDelegate, UITableViewDataSource, UISearchResultsUpdating, UISearchBarDelegate, UIScrollViewDelegate  {
     @IBOutlet weak var pageControl: UIPageControl!
     @IBOutlet weak var mainDataLanding: UIView!
@@ -41,8 +45,7 @@ class ViewController: UIViewController, UITableViewDelegate, UISearchControllerD
     var weeklyDataCells = [CellData]()
     private let networkClient = NetworkClient()
     private let locationManager = CLLocationManager()
-    var weeklyData:JSON = [:]
-    var currentlyData:JSON = [:]
+
     var cities: [String] = Array()
     var city: String = ""
     var state: String = ""
@@ -53,9 +56,27 @@ class ViewController: UIViewController, UITableViewDelegate, UISearchControllerD
     var time: Double = 0.0
     var frame = CGRect(x:0,y:0,width:0,height:0)
     let autoCompleteUrl = "https://weatherservice571.azurewebsites.net/"
+    var localCity: String = ""
     
+    var weeklyData:JSON = [:]
+    var currentlyData:JSON = [:]
+    var dailyData:JSON = [:]
     
+    var searchCity: String = ""
+    var searchState: String = ""
+    
+    var savedViews: [JSON] = [[:]]
 
+    override func viewWillAppear(_ animated: Bool) {
+        guard let navigation = navigationController,
+            !(navigation.topViewController === self) else {
+                return
+        }
+        let bar = navigation.navigationBar
+        bar.setNeedsLayout()
+        bar.layoutIfNeeded()
+        bar.setNeedsDisplay()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -65,31 +86,52 @@ class ViewController: UIViewController, UITableViewDelegate, UISearchControllerD
         locationManager.requestWhenInUseAuthorization()
         locationManager.requestLocation()
         
-        let lastLocation = locationManager.location
-        debugPrint(lastLocation)
-        
-        
-        
-        
-        
-        
-        
-        //******** PageControl
-        
-        pageControl.numberOfPages = 4
-        for index in 0..<4 {
-            frame.origin.x = scrollView.frame.size.width * CGFloat(index)
-            frame.size = scrollView.frame.size
-            
-            let homeView = HomeView(frame: frame)
-            if index != 0 {
-                          self.scrollView.addSubview(homeView)
-            }
-
-        }
-        scrollView.contentSize = CGSize(width: (scrollView.frame.size.width * CGFloat(4)), height: scrollView.frame.size.height)
-        
         scrollView.delegate = self
+        pageControl.numberOfPages = 1
+        
+        if let savedCities = UserDefaults.standard.dictionary(forKey: "savedCities") {
+            debugPrint(savedCities)
+            
+            for index in 0..<savedCities.count {
+                pageControl.numberOfPages = pageControl.numberOfPages + 1
+                frame.origin.x = scrollView.frame.size.width * CGFloat(index)
+                frame.size = scrollView.frame.size
+//                if let encryptedDataArray = JSON(data: encryptedData).arrayObject {
+//                    let jsonObject:JSON = [
+//                        "transactionID" : 12345,
+//                        "encryptedData" : encryptedDataArray
+//                    ]
+//
+//                }
+                
+                let homeView = HomeView(frame: frame)
+                if index != 0 {
+                    self.scrollView.addSubview(homeView)
+                }
+
+            }
+            scrollView.contentSize = CGSize(width: (scrollView.frame.size.width * CGFloat(savedCities.count + 1)), height: scrollView.frame.size.height)
+        }
+        
+        if let lastLocation = locationManager.location {
+            let geocoder = CLGeocoder()
+            geocoder.reverseGeocodeLocation(lastLocation, completionHandler: {(placemarks, error) in
+                if error == nil {
+                    let loc = placemarks?[0]
+                    debugPrint(loc?.locality)
+                    if let localCity = loc?.locality {
+                        self.localCity = localCity
+                        self.currentLocation.text = localCity
+                    }
+    
+                   // completionHandler(loc)
+                }
+                else {
+                    //completionHandler(nil)
+                }
+            })
+        }
+        
 
         
         //****** DataCell
@@ -124,21 +166,6 @@ class ViewController: UIViewController, UITableViewDelegate, UISearchControllerD
         cities.append("Los Angeles")
         cities.append("Las Vegas")
 
-        
-
-
-//        guard let getUrl = URL(string: "https://weatherservice571.azurewebsites.net/street/819%20Santee%20St/city/Los%20Angeles/state/California") else {
-//            return
-//        }
-//        networkClient.fetch(getUrl) { (json, error) in
-//            if error != nil {
-//
-//            } else {
-//                 // debugPrint(json)
-//            }
-//        }
-        
-        //** UITableViewTwo
     }
     
     func updateSearchResults(for searchController: UISearchController) {
@@ -213,8 +240,6 @@ class ViewController: UIViewController, UITableViewDelegate, UISearchControllerD
 
             let cell = tableView.dequeueReusableCell(withIdentifier: "WeekData") as! WeeklyData
             
-            debugPrint(self.weeklyData)
-            
             if let unixTime = self.weeklyData[indexPath.row]["time"].double {
                 let formatter = DateFormatter()
                 formatter.dateFormat = "MM/dd/yyy"
@@ -224,13 +249,13 @@ class ViewController: UIViewController, UITableViewDelegate, UISearchControllerD
             if let sunsetTime = self.weeklyData[indexPath.row]["sunsetTime"].double {
                 let formatter = DateFormatter()
                 formatter.dateFormat = "HH:mm"
-                cell.weekSunDown.text = formatter.string(from: NSDate(timeIntervalSince1970: sunsetTime) as Date)
+                cell.weekSunUp.text = formatter.string(from: NSDate(timeIntervalSince1970: sunsetTime) as Date)
             }
             
             if let sunriseTime = self.weeklyData[indexPath.row]["sunriseTime"].double {
                 let formatter = DateFormatter()
                 formatter.dateFormat = "HH:mm"
-                cell.weekSunUp.text = formatter.string(from: NSDate(timeIntervalSince1970: sunriseTime) as Date)
+                cell.weekSunDown.text = formatter.string(from: NSDate(timeIntervalSince1970: sunriseTime) as Date)
             }
             
             let icon = self.weeklyData[indexPath.row]["icon"]
@@ -270,29 +295,6 @@ class ViewController: UIViewController, UITableViewDelegate, UISearchControllerD
                 let img = UIImage(named: "weather-partly-cloudy")
                 cell.weekSummary.image = img
             }
-            
-            
-            // cell?.textLabel?.text = cities[indexPath.row]
-//            if let unixTime = self.weeklyData["data"][indexPath.row]["time"].double {
-//                let formatter = DateFormatter()
-//                formatter.dateFormat = "MM/dd/yyyy"
-//                cell.date = formatter.string(from: NSDate(timeIntervalSince1970: unixTime) as Date)
-//
-//            }
-//            cell.forecastImg = UIImage(named: "weather-windy50") //weather-sunset-up
-//            cell.sunDownImg = UIImage(named: "weather-sunset-down")
-//            cell.sunUpImg = UIImage(named: "weather-sunset-up")
-//            if let sunsetTime = self.weeklyData["data"][indexPath.row]["sunsetTime"].double {
-//                let formatter = DateFormatter()
-//                formatter.dateFormat = "HH:mm"
-//                cell.sunDownTime = formatter.string(from: NSDate(timeIntervalSince1970: sunsetTime) as Date)
-//            }
-//            if let sunriseTime = self.weeklyData["data"][indexPath.row]["sunriseTime"].double {
-//                let formatter = DateFormatter()
-//                formatter.dateFormat = "HH:mm"
-//                cell.sunUpTime = formatter.string(from: NSDate(timeIntervalSince1970: sunriseTime) as Date)
-//            }
-//            debugPrint(cell.sunDownTime)
             cell.layoutIfNeeded()
             return cell as UITableViewCell
         }
@@ -305,38 +307,34 @@ class ViewController: UIViewController, UITableViewDelegate, UISearchControllerD
         if tableView == cityList {
         let cityString = self.cities[indexPath.row]
         let cityArray = cityString.components(separatedBy: ", ")
-        self.city = cityArray[0]
-        self.state = cityArray[1]
-        self.performSegue(withIdentifier: "cityClick", sender: self)
-
+        self.searchCity = cityArray[0]
+        self.searchState = cityArray[1]
         self.cities.removeAll()
+        self.performSegue(withIdentifier: "cityClick", sender: self)
         }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if(segue.identifier == "cityClick") {
             
-            let barViewControllers = segue.destination as! FourthViewController
-//            destinationViewController.city = self.city
-//            destinationViewController.state = self.state
-            
-//            let barViewControllers = segue.destination as! UITabBarController
-//            let destinationViewController = barViewControllers.viewControllers![0] as! SecondViewController
-//            destinationViewController.city = self.city
-//            destinationViewController.state = self.state
-//            let thirdViewController = barViewControllers.viewControllers![2] as! ThirdViewController
-//            thirdViewController.city = self.city
-//            thirdViewController.state = self.state
+            let fourthViewController = segue.destination as! FourthViewController
+            fourthViewController.city = self.searchCity
+            fourthViewController.state = self.searchState
         }
         else if(segue.identifier == "localClick") {
 
-                        let barViewControllers = segue.destination as! UITabBarController
-                        let destinationViewController = barViewControllers.viewControllers![0] as! SecondViewController
-                        destinationViewController.city = self.city
-                        destinationViewController.state = self.state
-                        let thirdViewController = barViewControllers.viewControllers![2] as! ThirdViewController
-                        thirdViewController.city = self.city
-                        thirdViewController.state = self.state
+            let barViewControllers = segue.destination as! UITabBarController
+            let destinationViewController = barViewControllers.viewControllers![0] as! SecondViewController
+            destinationViewController.city = self.localCity
+            destinationViewController.state = self.state
+            destinationViewController.currently = self.currentlyData
+            destinationViewController.daily = self.weeklyData
+            let thirdViewController = barViewControllers.viewControllers![2] as! ThirdViewController
+            thirdViewController.city = self.localCity
+            thirdViewController.state = self.state
+            let firstController = barViewControllers.viewControllers![1] as! FirstViewController
+            firstController.daily = self.dailyData
+            firstController.city = self.city
         }
     }
 
@@ -365,6 +363,7 @@ extension ViewController : CLLocationManagerDelegate {
                 self.localData = json!
                 let jsonUnwrapped = JSON(json)
                 self.weeklyData = jsonUnwrapped["daily"]["data"]
+                self.dailyData = jsonUnwrapped["daily"]
                 self.currentlyData = jsonUnwrapped["currently"]
                 let icon = self.currentlyData["icon"].string!.lowercased()
                 if(icon == "partly-cloudy-night") {
@@ -428,14 +427,13 @@ extension ViewController : CLLocationManagerDelegate {
                     self.currentPressure.text = String(format: "%.1f", currentPres) + " mb"
                 }
                 
-                debugPrint(self.currentlyData)
+        
                 DispatchQueue.main.async {
                     self.weeklyDataTable.reloadData()
                     SwiftSpinner.hide()
                 }
             }
         }
-        // Do something with the location.
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {

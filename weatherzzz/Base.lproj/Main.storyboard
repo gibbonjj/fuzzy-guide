@@ -67,7 +67,7 @@
                                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="water-percent50" translatesAutoresizingMaskIntoConstraints="NO" id="Pxf-39-Sag">
                                                         <rect key="frame" x="0.0" y="84.5" width="90" height="16"/>
                                                     </imageView>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="77.0 %" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nAs-aa-YQE">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Loading" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nAs-aa-YQE">
                                                         <rect key="frame" x="0.0" y="100.5" width="90" height="19.5"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                         <nil key="textColor"/>
@@ -90,7 +90,7 @@
                                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="weather-windy50" translatesAutoresizingMaskIntoConstraints="NO" id="Wrs-oT-qoR">
                                                         <rect key="frame" x="0.0" y="84.5" width="90" height="16"/>
                                                     </imageView>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="2.19 mph" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eik-wL-qcy">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Loading" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eik-wL-qcy">
                                                         <rect key="frame" x="0.0" y="100.5" width="90" height="19.5"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                         <nil key="textColor"/>
@@ -113,7 +113,7 @@
                                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="eye-outline50" translatesAutoresizingMaskIntoConstraints="NO" id="HwS-O0-uIw">
                                                         <rect key="frame" x="0.0" y="84.5" width="90" height="16"/>
                                                     </imageView>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="8.35 km" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Eob-dN-P1a">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Loading" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Eob-dN-P1a">
                                                         <rect key="frame" x="0.0" y="100.5" width="90" height="19.5"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                         <nil key="textColor"/>
@@ -137,7 +137,7 @@
                                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="gauge50" translatesAutoresizingMaskIntoConstraints="NO" id="xoe-hu-Om9">
                                                         <rect key="frame" x="0.0" y="84.5" width="90" height="16"/>
                                                     </imageView>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="1015.6 mb" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fm1-id-N95">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Loading" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fm1-id-N95">
                                                         <rect key="frame" x="0.0" y="100.5" width="90" height="19.5"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                         <nil key="textColor"/>
@@ -162,28 +162,23 @@
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </tableView>
                                     <stackView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" axis="vertical" spacing="14" translatesAutoresizingMaskIntoConstraints="NO" id="nHu-4R-PQr">
-                                        <rect key="frame" x="199" y="136" width="93.5" height="96.5"/>
+                                        <rect key="frame" x="199" y="136" width="80.5" height="96.5"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="90D-t1-WO7">
-                                                <rect key="frame" x="0.0" y="0.0" width="93.5" height="27.5"/>
-                                                <attributedString key="attributedText">
-                                                    <fragment content="Clear">
-                                                        <attributes>
-                                                            <font key="NSFont" metaFont="system" size="23"/>
-                                                        </attributes>
-                                                    </fragment>
-                                                </attributedString>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="90D-t1-WO7">
+                                                <rect key="frame" x="0.0" y="0.0" width="80.5" height="27.5"/>
+                                                <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="23"/>
+                                                <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="61 F" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8pL-vn-aAf">
-                                                <rect key="frame" x="0.0" y="41.5" width="93.5" height="20.5"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8pL-vn-aAf">
+                                                <rect key="frame" x="0.0" y="41.5" width="80.5" height="20.5"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Los Angeles" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zKw-bI-nQf">
-                                                <rect key="frame" x="0.0" y="76" width="93.5" height="20.5"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zKw-bI-nQf">
+                                                <rect key="frame" x="0.0" y="76" width="80.5" height="20.5"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -198,6 +193,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="TTi-kU-eDZ">
                         <nil key="title"/>
+                        <barButtonItem key="backBarButtonItem" title="Weather" id="UAs-kg-2t1"/>
                     </navigationItem>
                     <connections>
                         <outlet property="cityList" destination="EAE-Ag-8ft" id="RoO-LU-1a9"/>
@@ -287,6 +283,8 @@
                     <tabBarItem key="tabBarItem" title="Weekly" image="trending-up" id="Gi1-Up-0Vo"/>
                     <connections>
                         <outlet property="lineChartView" destination="ChR-iP-Ofj" id="BxU-9u-Ghf"/>
+                        <outlet property="summary" destination="Eqb-5F-U1b" id="hYw-rN-Ox9"/>
+                        <outlet property="weeklySum" destination="Rus-Od-AFW" id="Zas-0C-cgZ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ubG-Fh-EJT" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -587,7 +585,7 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Los Angeles" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RDc-tI-gex">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Los Angeles" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RDc-tI-gex">
                                                 <rect key="frame" x="0.0" y="41" width="93.5" height="20.5"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
@@ -600,10 +598,10 @@
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     </imageView>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zH7-BC-Mud">
-                                        <rect key="frame" x="8" y="8" width="358" height="182"/>
+                                        <rect key="frame" x="8" y="8" width="52" height="182"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <connections>
-                                            <segue destination="ZP9-WX-Hmx" kind="show" id="Nx1-fH-Q3D"/>
+                                            <segue destination="ZP9-WX-Hmx" kind="show" identifier="cityDataClick" id="Nx1-fH-Q3D"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -717,14 +715,30 @@
                                     </stackView>
                                 </subviews>
                             </stackView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="plus-circle" translatesAutoresizingMaskIntoConstraints="NO" id="KEF-hp-yGK">
-                                <rect key="frame" x="346" y="88" width="48" height="50"/>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JVb-Pi-LrH">
+                                <rect key="frame" x="352" y="104" width="30" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </imageView>
+                                <state key="normal" image="plus-circle"/>
+                                <connections>
+                                    <action selector="addToFavorites:" destination="ibp-q7-qWD" eventType="touchUpInside" id="O99-vZ-qWg"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="eti-vE-sup"/>
                     </view>
+                    <connections>
+                        <outlet property="currentHumidity" destination="9be-pS-XHZ" id="4Os-JW-8p5"/>
+                        <outlet property="currentLocation" destination="RDc-tI-gex" id="acX-zh-sks"/>
+                        <outlet property="currentPressure" destination="kWe-wj-XsN" id="2uw-ci-mhz"/>
+                        <outlet property="currentStatus" destination="KVO-q1-02o" id="zfn-8u-N29"/>
+                        <outlet property="currentTemp" destination="LFH-yA-MzR" id="PZS-j2-2eX"/>
+                        <outlet property="currentVisbility" destination="pLY-u8-zOp" id="FPR-VB-ufz"/>
+                        <outlet property="currentWindSpeed" destination="SvF-N7-hgw" id="CtU-7t-cJb"/>
+                        <outlet property="favButton" destination="JVb-Pi-LrH" id="a3W-jA-x6z"/>
+                        <outlet property="weeklyDataTable" destination="fe0-gd-biZ" id="FuD-Bb-ceO"/>
+                        <outlet property="weeklySum" destination="gmV-KC-DRo" id="sUQ-Dt-keL"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2UB-Qq-WMV" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -773,6 +787,6 @@
         <image name="weather-windy50" width="50" height="50"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="HwZ-ZM-JSw"/>
+        <segue reference="Nx1-fH-Q3D"/>
     </inferredMetricsTieBreakers>
 </document>

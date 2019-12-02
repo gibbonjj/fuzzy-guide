@@ -12,10 +12,14 @@ import SwiftyJSON
 
 class FirstViewController: UIViewController, ChartViewDelegate{
 
+    @IBOutlet weak var summary: UILabel!
+    @IBOutlet weak var weeklySum: UIImageView!
     // https://www.iosapptemplates.com/blog/swift-programming/ios-charts-swift
     @IBOutlet weak var lineChartView: LineChartView!
     var daily: JSON = [:]
     var city: String = ""
+    var icon: String = ""
+    // var summary: String = ""
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -32,6 +36,49 @@ class FirstViewController: UIViewController, ChartViewDelegate{
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.title = self.city
+        if let icon = self.daily["icon"].string {
+            self.icon = icon
+        }
+        if let summary = self.daily["summary"].string {
+            self.summary.text = summary
+        }
+        debugPrint("+++++" + icon)
+        if(icon == "partly-cloudy-night") {
+            let img = UIImage(named: "weather-night-partly-cloudy")
+            self.weeklySum.image = img
+        }
+        else if (icon == "clear-day") {
+            let img = UIImage(named: "weather-sunny")
+            self.weeklySum.image = img
+        }
+        else if (icon == "rain") {
+            let img = UIImage(named: "weather-rainy")
+            self.weeklySum.image = img
+        }
+        else if (icon == "snow") {
+            let img = UIImage(named: "weather-snowy")
+            self.weeklySum.image = img
+        }
+        else if (icon == "sleet") {
+            let img = UIImage(named: "weather-snowy-rainy")
+            self.weeklySum.image = img
+        }
+        else if (icon == "wind") {
+            let img = UIImage(named: "weather-windy")
+            self.weeklySum.image = img
+        }
+        else if (icon == "fog") {
+            let img = UIImage(named: "weather-fog")
+            self.weeklySum.image = img
+        }
+        else if (icon == "cloudy") {
+            let img = UIImage(named: "weather-cloudy")
+            self.weeklySum.image = img
+        }
+        else if (icon == "partly-cloudy-day") {
+            let img = UIImage(named: "weather-partly-cloudy")
+            self.weeklySum.image = img
+        }
 
         var days: [Int] = []
         var minTemps: [Double] = []
