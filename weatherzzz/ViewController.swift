@@ -65,21 +65,9 @@ class ViewController: UIViewController, UITableViewDelegate, UISearchControllerD
     var searchCity: String = ""
     var searchState: String = ""
     
-    var savedViews: [JSON] = [[:]]
+    
 
     override func viewWillAppear(_ animated: Bool) {
-        guard let navigation = navigationController,
-            !(navigation.topViewController === self) else {
-                return
-        }
-        let bar = navigation.navigationBar
-        bar.setNeedsLayout()
-        bar.layoutIfNeeded()
-        bar.setNeedsDisplay()
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
         SwiftSpinner.show("Loading...")
         //** Location **
         locationManager.delegate = self
@@ -88,30 +76,30 @@ class ViewController: UIViewController, UITableViewDelegate, UISearchControllerD
         
         scrollView.delegate = self
         pageControl.numberOfPages = 1
+        var savedViews: [JSON] = []
         
-        if let savedCities = UserDefaults.standard.dictionary(forKey: "savedCities") {
+        let defaults = UserDefaults.standard
+        if let savedCities = defaults.dictionary(forKey: "savedCities") {
             debugPrint(savedCities)
-            
-            for index in 0..<savedCities.count {
-                pageControl.numberOfPages = pageControl.numberOfPages + 1
-                frame.origin.x = scrollView.frame.size.width * CGFloat(index)
-                frame.size = scrollView.frame.size
-//                if let encryptedDataArray = JSON(data: encryptedData).arrayObject {
-//                    let jsonObject:JSON = [
-//                        "transactionID" : 12345,
-//                        "encryptedData" : encryptedDataArray
-//                    ]
-//
-//                }
-                
-                let homeView = HomeView(frame: frame)
-                if index != 0 {
-                    self.scrollView.addSubview(homeView)
+            for (key, value) in savedCities {
+                do {
+                    let encryptedDataArray = try JSON(data: defaults.data(forKey: key)!)
+                    debugPrint("yes")
+                    savedViews.append(encryptedDataArray)
+                } catch {
+                    debugPrint("error")
                 }
-
             }
-            scrollView.contentSize = CGSize(width: (scrollView.frame.size.width * CGFloat(savedCities.count + 1)), height: scrollView.frame.size.height)
         }
+        
+        for index in 0..<savedViews.count {
+            pageControl.numberOfPages = pageControl.numberOfPages + 1
+            frame.origin.x = scrollView.frame.size.width * CGFloat(index + 1)
+            frame.size = scrollView.frame.size
+            let homeView = HomeView(frame: frame)
+            self.scrollView.addSubview(homeView)
+        }
+        scrollView.contentSize = CGSize(width: (scrollView.frame.size.width * CGFloat(savedViews.count + 1)), height: scrollView.frame.size.height)
         
         if let lastLocation = locationManager.location {
             let geocoder = CLGeocoder()
@@ -123,8 +111,8 @@ class ViewController: UIViewController, UITableViewDelegate, UISearchControllerD
                         self.localCity = localCity
                         self.currentLocation.text = localCity
                     }
-    
-                   // completionHandler(loc)
+                    
+                    // completionHandler(loc)
                 }
                 else {
                     //completionHandler(nil)
@@ -132,7 +120,7 @@ class ViewController: UIViewController, UITableViewDelegate, UISearchControllerD
             })
         }
         
-
+        
         
         //****** DataCell
         let weekCell = UINib(nibName: "WeeklyData", bundle: nil)
@@ -141,7 +129,7 @@ class ViewController: UIViewController, UITableViewDelegate, UISearchControllerD
         weeklyDataTable.delegate = self
         //self.weeklyDataTable.layoutIfNeeded()
         
-
+        
         //** SearchBar **
         self.searchController.searchResultsUpdater = self
         self.searchController.delegate = self
@@ -153,10 +141,10 @@ class ViewController: UIViewController, UITableViewDelegate, UISearchControllerD
         citySearchBar.delegate = self
         citySearchBar.placeholder = "Enter City Name..."
         self.navigationItem.titleView = citySearchBar
-
-
+        
+        
         self.definesPresentationContext = true
-
+        
         //** SearchList UITableView 1**
         cityList.dataSource = self
         cityList.layoutIfNeeded()
@@ -165,7 +153,20 @@ class ViewController: UIViewController, UITableViewDelegate, UISearchControllerD
         cityList.isHidden = true
         cities.append("Los Angeles")
         cities.append("Las Vegas")
-
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        mainDataLanding.layer.masksToBounds = true
+        mainDataLanding.layer.borderWidth = 1.5
+        mainDataLanding.layer.borderColor = UIColor.white.cgColor
+        mainDataLanding.layer.cornerRadius = 10.0
+        
+        weeklyDataTable.layer.masksToBounds = true
+        weeklyDataTable.layer.borderWidth = 1.5
+        weeklyDataTable.layer.borderColor = UIColor.white.cgColor
+        weeklyDataTable.layer.cornerRadius = 10.0
+        
     }
     
     func updateSearchResults(for searchController: UISearchController) {
@@ -408,7 +409,7 @@ extension ViewController : CLLocationManagerDelegate {
                 }
                 
                 if let currentTemp = self.currentlyData["temperature"].double {
-                    self.currentTemp.text = String(Int(currentTemp.rounded())) + " ˚F"
+                    self.currentTemp.text = String(Int(currentTemp.rounded())) + "˚F"
                 }
                 
                 if let currentHumidity = self.currentlyData["humidity"].double {

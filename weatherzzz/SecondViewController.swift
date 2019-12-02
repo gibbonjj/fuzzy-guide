@@ -13,20 +13,22 @@ import SwiftyJSON
 class SecondViewController: UIViewController {
 
 
-    @IBOutlet weak var windSpeed: UILabel!
-    @IBOutlet weak var pressure: UILabel!
-    @IBOutlet weak var precipitation: UILabel!
-    @IBOutlet weak var temperature: UILabel!
-    @IBOutlet weak var nightWeather: UILabel!
-    @IBOutlet weak var humidity: UILabel!
-    @IBOutlet weak var visibility: UILabel!
-    @IBOutlet weak var cloudCover: UILabel!
-    @IBOutlet weak var ozone: UILabel!
+    @IBOutlet weak var windSpeedData: UILabel!
+    @IBOutlet weak var pressureData: UILabel!
+    @IBOutlet weak var precipitationData: UILabel!
+    @IBOutlet weak var temperatureData: UILabel!
+    @IBOutlet weak var nightWeatherData: UILabel!
+    @IBOutlet weak var humidityData: UILabel!
+    @IBOutlet weak var visibilityData: UILabel!
+    @IBOutlet weak var cloudCoverData: UILabel!
+    @IBOutlet weak var ozoneData: UILabel!
     
     var city: String = ""
     var state: String = ""
     var currently: JSON = [:]
     var daily: JSON = [:]
+    var weatherTemp: String = ""
+    var weatherCondition: String = ""
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -76,39 +78,39 @@ class SecondViewController: UIViewController {
 //        }
 
         if let summary = self.currently["summary"].string {
-            self.nightWeather.text = summary
+            self.nightWeatherData.text = summary
         }
         
         if let currentTemp = self.currently["temperature"].double {
-            self.temperature.text = String(Int(currentTemp.rounded())) + " ˚F"
+            self.temperatureData.text = String(Int(currentTemp.rounded())) + " ˚F"
         }
         
         if let currentHumidity = self.currently["humidity"].double {
-            self.humidity.text = String((currentHumidity * 100.0).rounded()) + " %"
+            self.humidityData.text = String((currentHumidity * 100.0).rounded()) + " %"
         }
         
         if let currentWind = self.currently["windSpeed"].double {
-            self.windSpeed.text = String(format: "%.2f", currentWind) + " mph"
+            self.windSpeedData.text = String(format: "%.2f", currentWind) + " mph"
         }
         
         if let currentVis = self.currently["visibility"].double {
-            self.visibility.text = String(format: "%.2f", currentVis) + " km"
+            self.visibilityData.text = String(format: "%.2f", currentVis) + " km"
         }
         
         if let currentPres = self.currently["pressure"].double {
-            self.pressure.text = String(format: "%.1f", currentPres) + " mb"
+            self.pressureData.text = String(format: "%.1f", currentPres) + " mb"
         }
         
         if let ozone = self.currently["ozone"].double {
-            self.ozone.text = String(format: "%.1f", ozone) + " DU"
+            self.ozoneData.text = String(format: "%.1f", ozone) + " DU"
         }
         
         if let cloudCover = self.currently["cloudCover"].double {
-            self.cloudCover.text = String(format: "%.2f", cloudCover * 100.0) + " %"
+            self.cloudCoverData.text = String(format: "%.2f", cloudCover * 100.0) + " %"
         }
         
         if let precip = self.currently["precipIntensity"].double {
-            self.precipitation.text = String(format: "%.1f", precip * 100.0) + " %"
+            self.precipitationData.text = String(format: "%.1f", precip * 100.0) + " %"
         }
         
         debugPrint(self.currently)
@@ -118,7 +120,7 @@ class SecondViewController: UIViewController {
     
     @objc func createTweet() {
         debugPrint("it works")
-        let twitterUrl = "https://twitter.com/intent/tweet?text=The current temperature at " + self.city + " is 72 ˚F. The weather conditions are sunny.&hashtags=CSCI571WeatherSearch"
+        let twitterUrl = "https://twitter.com/intent/tweet?text=The current temperature at " + self.city + " is " + self.weatherTemp + ". The weather conditions are " + self.weatherCondition + "&hashtags=CSCI571WeatherSearch"
         let encodedTwitterUrl = twitterUrl.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
         let twitterLink = URL(string: encodedTwitterUrl!)
         debugPrint(twitterLink)

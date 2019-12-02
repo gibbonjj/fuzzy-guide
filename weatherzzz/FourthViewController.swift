@@ -53,6 +53,7 @@ class FourthViewController: UIViewController, UITableViewDelegate, UISearchContr
     override func viewDidLoad() {
         super.viewDidLoad()
         SwiftSpinner.show("Fetching Weather Details for " + self.city + "...")
+        
         if let savedCities = UserDefaults.standard.dictionary(forKey: "savedCities") {
             if savedCities[self.city + "," + self.state] != nil {
                 self.favButton.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi/4))
@@ -287,12 +288,18 @@ class FourthViewController: UIViewController, UITableViewDelegate, UISearchContr
             destinationViewController.state = self.state
             destinationViewController.currently = self.currentlyData
             destinationViewController.daily = self.weeklyData
+            destinationViewController.weatherTemp = self.currentTemp.text!
+            destinationViewController.weatherCondition = self.currentStatus.text!
             let thirdViewController = barViewControllers.viewControllers![2] as! ThirdViewController
             thirdViewController.city = self.city
             thirdViewController.state = self.state
+            thirdViewController.weatherTemp = self.currentTemp.text!
+            thirdViewController.weatherCondition = self.currentStatus.text!
             let firstController = barViewControllers.viewControllers![1] as! FirstViewController
             firstController.daily = self.dailyData
             firstController.city = self.city
+            firstController.weatherTemp = self.currentTemp.text!
+            firstController.weatherCondition = self.currentStatus.text!
         }
     }
 }

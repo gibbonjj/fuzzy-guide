@@ -16,6 +16,8 @@ class ThirdViewController: UIViewController, UIScrollViewDelegate {
     var state: String = ""
     var images: [String] = []
     var frame = CGRect(x:0,y:0,width:0,height:0)
+    var weatherTemp: String = ""
+    var weatherCondition: String = ""
 
     
     @IBOutlet weak var scrollView: UIScrollView!
@@ -91,7 +93,7 @@ class ThirdViewController: UIViewController, UIScrollViewDelegate {
     
     @objc func createTweet() {
         debugPrint("it works")
-        let twitterUrl = "https://twitter.com/intent/tweet?text=The current temperature at " + self.city + " is 72 ˚F. The weather conditions are sunny.&hashtags=CSCI571WeatherSearch"
+        let twitterUrl = "https://twitter.com/intent/tweet?text=The current temperature at " + self.city + " is " + self.weatherTemp + ". The weather conditions are " + self.weatherCondition + "&hashtags=CSCI571WeatherSearch"
         let encodedTwitterUrl = twitterUrl.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
         let twitterLink = URL(string: encodedTwitterUrl!)
         debugPrint(twitterLink)

@@ -19,6 +19,8 @@ class FirstViewController: UIViewController, ChartViewDelegate{
     var daily: JSON = [:]
     var city: String = ""
     var icon: String = ""
+    var weatherTemp: String = ""
+    var weatherCondition: String = ""
     // var summary: String = ""
     
     override func viewWillAppear(_ animated: Bool) {
@@ -115,6 +117,15 @@ class FirstViewController: UIViewController, ChartViewDelegate{
         
         let minData = LineChartDataSet(entries: minDataEntries, label: minLabel)
         let maxData = LineChartDataSet(entries: maxDataEntries, label: maxLabel)
+        minData.drawCircleHoleEnabled = false
+        maxData.drawCircleHoleEnabled = false
+        minData.circleRadius = CGFloat(5.0)
+        maxData.circleRadius = CGFloat(5.0)
+        maxData.setColor(NSUIColor(red: 255.0/255.0, green: 165.0/255.0, blue: 0.0/255.0, alpha: 1.0))
+        minData.setColor(NSUIColor(red: 255.0/255.0, green: 255.0/255.0, blue: 255.0/255.0, alpha: 1.0))
+        maxData.setCircleColor(NSUIColor(red: 255.0/255.0, green: 165.0/255.0, blue: 0.0/255.0, alpha: 1.0))
+        minData.setCircleColor(NSUIColor(red: 255.0/255.0, green: 255.0/255.0, blue: 255.0/255.0, alpha: 1.0))
+
         data.addDataSet(minData)
         data.addDataSet(maxData)
         self.lineChartView.data = data
@@ -122,7 +133,7 @@ class FirstViewController: UIViewController, ChartViewDelegate{
     
     @objc func createTweet() {
         debugPrint("it works")
-        let twitterUrl = "https://twitter.com/intent/tweet?text=The current temperature at " + self.city + " is 72 ˚F. The weather conditions are sunny.&hashtags=CSCI571WeatherSearch"
+        let twitterUrl = "https://twitter.com/intent/tweet?text=The current temperature at " + self.city + " is " + self.weatherTemp + ". The weather conditions are " + self.weatherCondition + "&hashtags=CSCI571WeatherSearch"
         let encodedTwitterUrl = twitterUrl.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
         let twitterLink = URL(string: encodedTwitterUrl!)
         debugPrint(twitterLink)
