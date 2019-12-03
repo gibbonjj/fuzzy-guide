@@ -22,6 +22,7 @@ class SecondViewController: UIViewController {
     @IBOutlet weak var visibilityData: UILabel!
     @IBOutlet weak var cloudCoverData: UILabel!
     @IBOutlet weak var ozoneData: UILabel!
+    @IBOutlet weak var weeklySum: UIImageView!
     
     var city: String = ""
     var state: String = ""
@@ -112,6 +113,44 @@ class SecondViewController: UIViewController {
         
         if let precip = self.currently["precipIntensity"].double {
             self.precipitationData.text = String(format: "%.1f", precip * 100.0) + " %"
+        }
+        
+        let icon = self.currently["icon"].string!.lowercased()
+        if(icon == "partly-cloudy-night") {
+            let img = UIImage(named: "weather-night-partly-cloudy")
+            self.weeklySum.image = img
+        }
+        else if (icon == "clear-day") {
+            let img = UIImage(named: "weather-sunny")
+            self.weeklySum.image = img
+        }
+        else if (icon == "rain") {
+            let img = UIImage(named: "weather-rainy")
+            self.weeklySum.image = img
+        }
+        else if (icon == "snow") {
+            let img = UIImage(named: "weather-snowy")
+            self.weeklySum.image = img
+        }
+        else if (icon == "sleet") {
+            let img = UIImage(named: "weather-snowy-rainy")
+            self.weeklySum.image = img
+        }
+        else if (icon == "wind") {
+            let img = UIImage(named: "weather-windy")
+            self.weeklySum.image = img
+        }
+        else if (icon == "fog") {
+            let img = UIImage(named: "weather-fog")
+            self.weeklySum.image = img
+        }
+        else if (icon == "cloudy") {
+            let img = UIImage(named: "weather-cloudy")
+            self.weeklySum.image = img
+        }
+        else if (icon == "partly-cloudy-day") {
+            let img = UIImage(named: "weather-partly-cloudy")
+            self.weeklySum.image = img
         }
         
         debugPrint(self.currently)

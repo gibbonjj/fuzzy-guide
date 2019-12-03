@@ -260,7 +260,7 @@ class ViewController: UIViewController, UITableViewDelegate, UISearchControllerD
         NotificationCenter.default.addObserver(self, selector: #selector(removeFave (_:)), name: .didRemoveFave, object: nil)
         mainDataLanding.layer.masksToBounds = true
         mainDataLanding.layer.borderWidth = 1.5
-        mainDataLanding.layer.borderColor = UIColor.white.cgColor
+        mainDataLanding.layer.borderColor = UIColor(white:1.0, alpha: 1.0).cgColor
         mainDataLanding.layer.cornerRadius = 10.0
         
         weeklyDataTable.layer.masksToBounds = true

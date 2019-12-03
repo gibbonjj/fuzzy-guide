@@ -44,6 +44,7 @@ class FirstViewController: UIViewController, ChartViewDelegate{
         if let summary = self.daily["summary"].string {
             self.summary.text = summary
         }
+        self.summary.adjustsFontSizeToFitWidth = true
         debugPrint("+++++" + icon)
         if(icon == "partly-cloudy-night") {
             let img = UIImage(named: "weather-night-partly-cloudy")
