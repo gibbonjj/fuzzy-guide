@@ -35,6 +35,7 @@ class SecondViewController: UIViewController {
         self.tabBarController?.navigationItem.title = self.city
         let twitterImg: UIImage = UIImage(named: "twitter.png")!
         let tweetButton: UIButton = UIButton(type: UIButton.ButtonType.custom)
+        tweetButton.tintColor = UIColor.blue
         tweetButton.setImage(twitterImg, for: .normal)
         tweetButton.addTarget(self, action: #selector(SecondViewController.createTweet), for: .touchUpInside)
         let twitterButton = UIBarButtonItem(customView: tweetButton)

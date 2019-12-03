@@ -65,8 +65,9 @@ class ThirdViewController: UIViewController, UIScrollViewDelegate {
                     }
                     
                     for index in 0..<self.images.count {
-                        self.frame.origin.y = self.scrollView.frame.size.height * CGFloat(index)
-                        self.frame.size = self.scrollView.frame.size
+                        self.frame.origin.y = self.scrollView.frame.size.height * CGFloat(Double(index) * 0.75)
+                        self.frame.size.width = self.scrollView.frame.size.width
+                        self.frame.size.height = self.scrollView.frame.size.height * 0.75
                         let img = UIImageView(frame: self.frame)
                         let imgURL = URL(string: self.images[index])
                         let imgData = try? Data(contentsOf: imgURL!)
@@ -75,7 +76,7 @@ class ThirdViewController: UIViewController, UIScrollViewDelegate {
                         img.image = uiImg!
                         self.scrollView.addSubview(img)
                     }
-                    self.scrollView.contentSize = CGSize(width: (self.scrollView.frame.size.width), height: self.scrollView.frame.size.height * CGFloat(self.images.count))
+                    self.scrollView.contentSize = CGSize(width: (self.scrollView.frame.size.width), height: self.scrollView.frame.size.height * CGFloat(self.images.count) * 0.75)
                 }
                 debugPrint(self.images)
                 SwiftSpinner.hide()

@@ -13,6 +13,16 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="HomeView" customModule="weatherzzz" customModuleProvider="target">
             <connections>
                 <outlet property="contentView" destination="iN0-l3-epB" id="egx-Rm-QmI"/>
+                <outlet property="removeFavButton" destination="QFw-aR-E01" id="jPJ-6Q-WjX"/>
+                <outlet property="weatherHumidity" destination="aKB-tk-Zf7" id="kSS-p9-SbF"/>
+                <outlet property="weatherImg" destination="ZQu-2L-nCG" id="qBy-3l-nN0"/>
+                <outlet property="weatherLoc" destination="61V-J3-bux" id="wPZ-us-Hmj"/>
+                <outlet property="weatherPressure" destination="3na-Ab-TYv" id="LJP-eu-yM1"/>
+                <outlet property="weatherStatus" destination="k1k-NT-18V" id="nvP-Dc-njj"/>
+                <outlet property="weatherTemp" destination="WzM-9i-42K" id="N5B-d1-Uqu"/>
+                <outlet property="weatherVisibility" destination="vKv-ML-vto" id="toR-NF-m5a"/>
+                <outlet property="weatherWindSpeed" destination="Myh-7R-Roc" id="T6b-mY-Il2"/>
+                <outlet property="weeklyDataTable" destination="Cyg-5v-wjD" id="6gE-ma-q4d"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -170,6 +180,19 @@
                         </stackView>
                     </subviews>
                 </stackView>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QFw-aR-E01">
+                    <rect key="frame" x="330" y="49" width="30" height="30"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <state key="normal" image="plus-circle"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="layer.transform.rotation.z">
+                            <real key="value" value="0.78500000000000003"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <action selector="removeFavorite:" destination="-1" eventType="touchUpInside" id="WqN-yc-SLP"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
@@ -180,6 +203,7 @@
         <image name="background" width="4201" height="6302"/>
         <image name="eye-outline50" width="50" height="50"/>
         <image name="gauge50" width="50" height="50"/>
+        <image name="plus-circle" width="30" height="30"/>
         <image name="water-percent50" width="50" height="50"/>
         <image name="weather-snowy-rainy" width="90" height="90"/>
         <image name="weather-windy50" width="50" height="50"/>
